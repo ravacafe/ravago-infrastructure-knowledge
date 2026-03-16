@@ -1,0 +1,52 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Maintenance Pipeline — Automated AMBA Alert Processing Rule Control
+# ─────────────────────────────────────────────────────────────────────────────
+# Runs every 30 minutes (UTC) and evaluates the maintenance schedule.
+#
+#   30 min before a window starts  →  Disable all AMBA alert processing rules
+#   30 min after  a window ends    →  Re-enable all AMBA alert processing rules
+#
+# No manual intervention required. The pipeline fires automatically via
+# the schedule below and calls Invoke-MaintenanceAlertControl.ps1.
+#
+# PREREQUISITES
+#   1. Create an Azure DevOps Service Connection with permissions to manage
+#      Microsoft.AlertsManagement/actionRules across all Ravago subscriptions.
+#   2. Replace the 'serviceConnection' variable value with your connection name.
+#   3. Ensure the pipeline agent pool has access to a Windows-capable agent.
+# ─────────────────────────────────────────────────────────────────────────────
+
+trigger: none   # No CI trigger — schedule only
+
+schedules:
+  - cron: "*/30 * * * *"
+    displayName: "Every 30 minutes — Maintenance window check"
+    branches:
+      include:
+        - main
+    always: true   # Run even when there are no code changes
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  - name: serviceConnection
+    value: 'azure-service-connection'   # <-- replace with your service connection name
+
+jobs:
+  - job: MaintenanceWindowCheck
+    displayName: "Check Maintenance Windows and Control AMBA Alert Rules"
+    timeoutInMinutes: 20
+
+    steps:
+      - checkout: self
+
+      - task: AzurePowerShell@5
+        displayName: "Invoke Maintenance Alert Control"
+        inputs:
+          azureSubscription: $(serviceConnection)
+          ScriptType: FilePath
+          ScriptPath: '$(Build.SourcesDirectory)/Invoke-MaintenanceAlertControl.ps1'
+          ScriptArguments: '-LeadMinutes 30 -TrailMinutes 30'
+          azurePowerShellVersion: LatestVersion
+          pwsh: true

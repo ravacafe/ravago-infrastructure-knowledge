@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "engram": {
+      "command": "C:\\tools\\engram\\engram.exe",
+      "args": ["mcp"]
+    }
+  }
+}
