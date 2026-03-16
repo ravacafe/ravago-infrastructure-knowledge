@@ -1,0 +1,17 @@
+# Obsidian configuration (personal, don't share)
+.obsidian/
+
+# Obsidian trash
+.trash/
+
+# System files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary files
+*.tmp
+~$*
+
+# Any other personal config folders (if you have them)
+CAFE/.obsidian/
