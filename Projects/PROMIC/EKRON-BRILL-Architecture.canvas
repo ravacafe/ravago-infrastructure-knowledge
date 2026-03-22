@@ -1,0 +1,41 @@
+{
+	"nodes":[
+		{"id":"grp-data","type":"group","x":-820,"y":220,"width":1660,"height":300,"color":"1","label":"🗄️  Data Layer  —  sql-rav-prd-emea-promic  (Azure SQL)"},
+		{"id":"grp-apps","type":"group","x":-820,"y":-160,"width":1660,"height":280,"color":"2","label":"⚙️  Application Servers  —  On-Premises / Azure VMs"},
+		{"id":"grp-users","type":"group","x":-820,"y":-1120,"width":1660,"height":240,"color":"4","label":"👤  User Access Layer"},
+		{"id":"grp-identity","type":"group","x":-820,"y":-800,"width":1660,"height":240,"color":"6","label":"🔐  Identity & Security Layer"},
+		{"id":"grp-avd","type":"group","x":-820,"y":-480,"width":1660,"height":240,"color":"5","label":"🖥️  AVD Session Hosts  —  vmemeaavdro-1 · 2 · 3 · 4"},
+		{"id":"grp-appgw","type":"group","x":940,"y":-800,"width":380,"height":760,"color":"3","label":"🌐  App Gateway Path  (Web Apps only)"},
+		{"id":"brill-users","type":"text","text":"## 👤 BRILL Users\n**Formulation Team**\n\n- Entra ID account\n- Device: laptop / thin client\n- Location: any","x":-740,"y":-1080,"width":260,"height":160,"color":"4"},
+		{"id":"ekron-users","type":"text","text":"## 👤 EKRON Users\n**ERP / Operations Team**\n\n- Entra ID account\n- Device: laptop / thin client\n- Location: any","x":-100,"y":-1080,"width":260,"height":160,"color":"4"},
+		{"id":"web-users","type":"text","text":"## 👤 Web App Users\n**Browser-based access**\n\n- Any device\n- No client install\n- External / internal","x":560,"y":-1080,"width":260,"height":160,"color":"4"},
+		{"id":"entra-ca","type":"text","text":"## 🔐 Entra ID\n**Conditional Access**\n\n- ✅ MFA enforced\n- ✅ Device compliance\n- ✅ Sign-in risk policy\n- ✅ Group-based access","x":-780,"y":-760,"width":320,"height":180,"color":"6"},
+		{"id":"session-brill","type":"text","text":"## 🖥️ BRILL RemoteApp\n*Served from session host*\n\n**BRILL Formulation** installed here\n→ User sees only the app window\n→ Data never leaves Azure VNet","x":-780,"y":-440,"width":380,"height":180,"color":"5"},
+		{"id":"session-ekron","type":"text","text":"## 🖥️ EKRON RemoteApp\n*Served from session host*\n\n**EKRON ERP** installed here\n→ User sees only the app window\n→ Data never leaves Azure VNet","x":-280,"y":-440,"width":380,"height":180,"color":"5"},
+		{"id":"session-note","type":"text","text":"## ℹ️ Why AVD for Fat Clients?\n\n- App runs server-side in VNet\n- SQL traffic never hits user device\n- Central patching — one host\n- Conditional Access enforced\n- No credentials on laptops","x":220,"y":-440,"width":360,"height":180,"color":"5"},
+		{"id":"avd-broker","type":"text","text":"## ☁️ AVD Control Plane\n**Azure Broker / Gateway**\n\n- Transport: HTTPS/443\n- No inbound port openings\n- RemoteApp assignments\n- Token validation","x":-360,"y":-760,"width":320,"height":180,"color":"6"},
+		{"id":"palo-alto","type":"text","text":"## 🔥 Palo Alto NVA\n**Hub Firewall**\n\n- VNet traffic inspection\n- Intrazone rules\n- SSL bypass: `*.wvd.microsoft.com`\n- East-West enforcement","x":60,"y":-760,"width":320,"height":180,"color":"6"},
+		{"id":"appgw-node","type":"text","text":"## 🌐 Application Gateway\n**Layer 7 Reverse Proxy**\n\n- SSL termination (`*.ravago.com`)\n- WAF protection\n- URL-based routing\n- Key Vault cert (auto-renew)","x":960,"y":-760,"width":340,"height":180,"color":"3"},
+		{"id":"brill-server","type":"text","text":"## 🖧 vmemeabrill001p\n**BRILL Application Server**\n\n📦 **BRILL Formulation** *(Fat Client)*\n> Formulation management\n\n⚙️ **Promic Formula Integration** *(Windows Service)*\n> Background connector — no UI\n> Bridges BRILL ↔ FI-EKRON-BRILL DB","x":-780,"y":-120,"width":460,"height":240,"color":"2"},
+		{"id":"ekron-server","type":"text","text":"## 🖧 EKRON Server\n**ERP Application Server**\n\n📦 **EKRON ERP** *(Fat Client)*\n> Enterprise Resource Planning\n\n🔗 Reads/writes integration data\nfrom `FI-EKRON-BRILL` database\nvia Private Endpoint — TCP 1433","x":200,"y":-120,"width":460,"height":240,"color":"2"},
+		{"id":"web-backend","type":"text","text":"## 🌐 Web App Backend\n*(Future / Other apps)*\n\n- App Service / Container\n- Odoo, Grafana, portals\n- Exposed via AppGW\n- HTTPS only\n\n⚠️ **Cannot publish fat clients\nthrough App Gateway**","x":960,"y":-160,"width":340,"height":240,"color":"3"},
+		{"id":"db-fi","type":"text","text":"## 🗄️ FI-EKRON-BRILL\n**Integration Database**\n\n👤 `FI-EKRON-BRILL_Admin` → `db_owner`\n👤 `FI-EKRON-BRILL_User` → `db_datareader` + `db_datawriter`\n🔒 Private Endpoint — not internet-exposed","x":-780,"y":260,"width":440,"height":160,"color":"1"},
+		{"id":"db-other","type":"text","text":"## 🗄️ Other Databases\n\n- `C131_DATA` *(Ekon/Cegid)*\n- `C131_SDIC` *(Ekon/Cegid)*\n- Other Ravago DBs\n\n🔒 Private Endpoint","x":-240,"y":260,"width":340,"height":160,"color":"1"},
+		{"id":"db-security","type":"text","text":"## 🔒 SQL Security Notes\n\n- Azure SQL PaaS (no OS access)\n- No `USE db` — connect directly\n- Logins created in `master`\n- Users + roles in target DB\n- Creds stored in Key Vault","x":160,"y":260,"width":360,"height":160,"color":"1"}
+	],
+	"edges":[
+		{"id":"e-bu-entra","fromNode":"brill-users","fromSide":"bottom","toNode":"entra-ca","toSide":"top","color":"4","label":"HTTPS / 443"},
+		{"id":"e-eu-entra","fromNode":"ekron-users","fromSide":"bottom","toNode":"entra-ca","toSide":"top","color":"4","label":"HTTPS / 443"},
+		{"id":"e-wu-appgw","fromNode":"web-users","fromSide":"bottom","toNode":"appgw-node","toSide":"top","color":"3","label":"HTTPS / 443"},
+		{"id":"e-entra-avd","fromNode":"entra-ca","fromSide":"right","toNode":"avd-broker","toSide":"left","color":"6","label":"Token issued"},
+		{"id":"e-avd-pa","fromNode":"avd-broker","fromSide":"right","toNode":"palo-alto","toSide":"left","color":"6","label":"VNet routing"},
+		{"id":"e-avd-sbrill","fromNode":"avd-broker","fromSide":"bottom","toNode":"session-brill","toSide":"top","color":"5","label":"RDP session"},
+		{"id":"e-avd-sekron","fromNode":"avd-broker","fromSide":"bottom","toNode":"session-ekron","toSide":"top","color":"5","label":"RDP session"},
+		{"id":"e-sbrill-bserver","fromNode":"session-brill","fromSide":"bottom","toNode":"brill-server","toSide":"top","color":"2","label":"Runs on host"},
+		{"id":"e-sekron-eserver","fromNode":"session-ekron","fromSide":"bottom","toNode":"ekron-server","toSide":"top","color":"2","label":"Runs on host"},
+		{"id":"e-bserver-db","fromNode":"brill-server","fromSide":"bottom","toNode":"db-fi","toSide":"top","color":"1","label":"TCP 1433\nPrivate Endpoint"},
+		{"id":"e-eserver-db","fromNode":"ekron-server","fromSide":"bottom","toNode":"db-fi","toSide":"top","color":"1","label":"TCP 1433\nPrivate Endpoint"},
+		{"id":"e-appgw-web","fromNode":"appgw-node","fromSide":"bottom","toNode":"web-backend","toSide":"top","color":"3","label":"HTTP backend"},
+		{"id":"e-pa-bserver","fromNode":"palo-alto","fromSide":"bottom","toNode":"brill-server","toSide":"top","color":"6","label":"Inspected"}
+	]
+}

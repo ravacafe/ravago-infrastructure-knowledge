@@ -59,3 +59,4 @@ Projects/Maintenance-Pipeline/
 ├── maintenance-pipeline.yaml                    ← Config (editas en VS Code)
 ├── .claude/                                     ← Config (oculta)
 └── .engram/                                     ← Memories (oculta)
+
